@@ -6,9 +6,8 @@ Note:
 Part of this code was copied and modified from github.com/comma.ai/research (code: BSD License)
 
 Todo:
-Update steering angle projection.  Current version is a hack from comma.ai's version
-Update enable left, center and right camera selection.  Currently all three cameras are displayed.
-Update to enable display of trained steering data (green) as compared to actual (blue projection).
+Update steering angle projection.  Current version is a hack from comma.ai's version.
+Create steering angle projection for hdf5 files of images and steering angles.
 
 History:
 2016/10/06: Update to add --skip option to skip the first X seconds of data from rosbag.
@@ -87,7 +86,6 @@ def draw_path(img, path_x, path_y, color, shift_from_mid):
 		draw_pt(img, x, y, color, shift_from_mid)
 
 # ***** functions to draw predicted path *****
-
 def calc_curvature(v_ego, angle_steers, angle_offset=0):
 	deg_to_rad = np.pi/180.
 	slip_fator = 0.0014 # slip factor obtained from real data
@@ -114,8 +112,8 @@ def draw_path_on(img, speed_ms, angle_steers, color=(0,0,255), shift_from_mid=0)
 # ***** main loop *****
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='Udacity SDC Challenge-2 Video viewer')
-	parser.add_argument('--dataset', type=str, default="dataset.bag", help='Dataset/ROS Bag name')
-	parser.add_argument('--skip', type=int, default="0", help='skip seconds')
+	parser.add_argument('--dataset', type=str, default="/home/gautam/Desktop/SDC-Udacity-Challenge-2/images/ros_dataset/dataset.bag", help='ROS Bag name')
+	parser.add_argument('--skip', type=int, default="0", help='Skip seconds')
 	args = parser.parse_args()
 
 	dataset = args.dataset
@@ -143,7 +141,6 @@ if __name__ == "__main__":
 			
 				try: 
 					if topic in ['/center_camera/image_color','/right_camera/image_color','/left_camera/image_color']:
-						# RGB_str = msg.data
 						RGB_str = np.fromstring(msg.data, dtype='uint8').reshape((640*480),3)[:, (2, 1, 0)].tostring() 
 			
 						if topic == '/left_camera/image_color':
