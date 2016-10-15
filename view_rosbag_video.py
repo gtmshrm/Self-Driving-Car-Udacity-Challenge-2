@@ -112,7 +112,7 @@ def draw_path_on(img, speed_ms, angle_steers, color=(0,0,255), shift_from_mid=0)
 # ***** main loop *****
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='Udacity SDC Challenge-2 Video viewer')
-	parser.add_argument('--dataset', type=str, default="/home/gautam/Desktop/SDC-Udacity-Challenge-2/images/ros_dataset/dataset.bag", help='ROS Bag name')
+	parser.add_argument('--dataset', type=str, default="ros_dataset/dataset.bag", help='ROS Bag name')
 	parser.add_argument('--skip', type=int, default="0", help='Skip seconds')
 	args = parser.parse_args()
 
