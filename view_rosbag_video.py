@@ -109,6 +109,7 @@ def draw_path_on(img, speed_ms, angle_steers, color=(0,0,255), shift_from_mid=0)
 	path_y, _ = calc_lookahead_offset(speed_ms, angle_steers, path_x)
 	draw_path(img, path_x, path_y, color, shift_from_mid)
 
+	
 # ***** main loop *****
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='Udacity SDC Challenge-2 Video viewer')
