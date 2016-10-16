@@ -19,11 +19,13 @@ def save_batch(dataset, steps, outdir, batch_nbr):
 	"""
 	Save batch in hdf5 file
 	"""
-	camera = np.array(dataset['camera'])
-	steering_angle = np.array(dataset['steering_angle'])
 	with h5py.File(outdir+"/batch%d.h5" % (batch_nbr), 'w') as f:
-		f.create_dataset('camera', data=camera)
-		f.create_dataset('steering_angle', data=steering_angle)
+		f.create_dataset('left_camera_image', data=np.array(dataset['left_camera']))
+		f.create_dataset('left_camera_steering_angle', data=np.array(dataset['left_camera/steering_angle']))
+		f.create_dataset('center_camera_image', data=np.array(dataset['center_camera']))
+		f.create_dataset('center_camera_steering_angle', data=np.array(dataset['center_camera/steering_angle']))
+		f.create_dataset('right_camera_image', data=np.array(dataset['right_camera']))
+		f.create_dataset('right_camera_steering_angle', data=np.array(dataset['right_camera/steering_angle']))
 	return batch_nbr + 1
 	
 
@@ -39,8 +41,12 @@ if __name__ == "__main__":
 	if args.batch_gen_time == -1:
 		raise Exception("You didn't enter time duration of each batch generation")
 
-	dataset = {'camera': [], 
-			   'steering_angle': []}
+	dataset = {'left_camera': [], 
+			   'left_camera/steering_angle': [],
+			   'center_camera': [], 
+			   'center_camera/steering_angle': [],
+			   'right_camera': [], 
+			   'right_camera/steering_angle': []}
 
 	batch_nbr = 0
 	dataset_path = args.dataset_path
@@ -78,8 +84,8 @@ if __name__ == "__main__":
 					print(topic, msg.header.seq, t-msg.header.stamp, msg.height, msg.width, msg.encoding, t)
 					cv_image = bridge.imgmsg_to_cv2(msg, "bgr8")
 					cv_image = cv2.resize(cv_image, (320, 240), interpolation=cv2.INTER_CUBIC)
-					dataset['camera'].append(cv_image)
-					dataset['steering_angle'].append(angle_steers)
+					dataset[topic.split('/')[1]].append(cv_image)
+					dataset[topic.split('/')[1]+'/steering_angle'].append(angle_steers)
 			except Exception, e:
 				print("Error saving image.", e)
 		
@@ -88,8 +94,12 @@ if __name__ == "__main__":
 			print("********* NEW BATCH *********")
 			batch_nbr = save_batch(dataset, steps, outdir, batch_nbr)
 			# empty arrays of prev batch
-			dataset = {'camera': [], 
-		   			   'steering_angle': []}
+			dataset = {'left_camera': [], 
+					   'left_camera/steering_angle': [],
+					   'center_camera': [], 
+					   'center_camera/steering_angle': [],
+					   'right_camera': [], 
+					   'right_camera/steering_angle': []}
 			# increase batch generation time to generate another batch
 			batch_gen_time += args.batch_gen_time
 			# generate first example for new batch
@@ -100,8 +110,8 @@ if __name__ == "__main__":
 					print(topic, msg.header.seq, t-msg.header.stamp, msg.height, msg.width, msg.encoding, t)
 					cv_image = bridge.imgmsg_to_cv2(msg, "bgr8")
 					cv_image = cv2.resize(cv_image, (320, 240), interpolation=cv2.INTER_CUBIC)
-					dataset['camera'].append(cv_image)
-					dataset['steering_angle'].append(angle_steers)
+					dataset[topic.split('/')[1]].append(cv_image)
+					dataset[topic.split('/')[1]+'/steering_angle'].append(angle_steers)
 			except Exception, e:
 				print("Error saving image.", e)
 		
