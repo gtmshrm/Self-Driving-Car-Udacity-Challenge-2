@@ -2,7 +2,8 @@
 """
 Convert ROS bag data into hdf5 files with specified batch generation time
 
-Note: Batch generation time of 300 seconds generates batches of 300 images with corresponding steering angles
+Note: Batch generation time of 300 seconds generates batches of 300 images 
+(including left, center and right camera frames) with corresponding steering angles
 """
 import argparse
 import sys
