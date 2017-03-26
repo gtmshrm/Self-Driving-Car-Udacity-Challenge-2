@@ -10,7 +10,7 @@ In the 2nd terminal, run the command line:
 import os
 import os.path
 import tensorflow as tf
-import driving_data
+import datagen
 import model
 import numpy as np
 
@@ -47,12 +47,12 @@ val_summary_writer = tf.train.SummaryWriter(VAL_TENSORBOARD_LOG, graph=tf.get_de
 
 batch_size = 100
 
-for i in range(int(driving_data.num_images * 3)):
-  xs_train, ys_train = driving_data.LoadTrainBatch(batch_size)
+for i in range(int(datagen.num_images * 3)):
+  xs_train, ys_train = datagen.LoadTrainBatch(batch_size)
   train_step.run(feed_dict={model.x: xs_train, model.y_: ys_train, model.keep_prob: 0.8})
-  
+
   if i % 10 == 0:
-    xs_val, ys_val = driving_data.LoadValBatch(batch_size)
+    xs_val, ys_val = datagen.LoadValBatch(batch_size)
     # Write logs at every iteration
     train_loss = train_summary.eval(feed_dict={model.x:xs_train, model.y_: ys_train, model.keep_prob: 1.0})
     val_loss = val_summary.eval(feed_dict={model.x:xs_val, model.y_: ys_val, model.keep_prob: 1.0})
