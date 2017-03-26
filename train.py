@@ -26,7 +26,6 @@ train_step = tf.train.AdamOptimizer(1e-4).minimize(loss)
 
 saver = tf.train.Saver()
 
-# create a summary to monitor cost tensor
 train_summary = tf.scalar_summary("train_loss", loss)
 val_summary = tf.scalar_summary("val_loss", loss)
 
@@ -43,7 +42,6 @@ if not os.path.exists(TRAIN_TENSORBOARD_LOG):
 if not os.path.exists(VAL_TENSORBOARD_LOG):
   os.makedirs(VAL_TENSORBOARD_LOG)
 
-# op to write logs to Tensorboard
 train_summary_writer = tf.train.SummaryWriter(TRAIN_TENSORBOARD_LOG, graph=tf.get_default_graph())
 val_summary_writer = tf.train.SummaryWriter(VAL_TENSORBOARD_LOG, graph=tf.get_default_graph())
 
@@ -55,7 +53,7 @@ for i in range(int(driving_data.num_images * 3)):
   
   if i % 10 == 0:
     xs_val, ys_val = driving_data.LoadValBatch(batch_size)
-    # write logs at every iteration
+    # Write logs at every iteration
     train_loss = train_summary.eval(feed_dict={model.x:xs_train, model.y_: ys_train, model.keep_prob: 1.0})
     val_loss = val_summary.eval(feed_dict={model.x:xs_val, model.y_: ys_val, model.keep_prob: 1.0})
     train_summary_writer.add_summary(train_loss, i)

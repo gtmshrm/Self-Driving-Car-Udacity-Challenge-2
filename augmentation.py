@@ -1,7 +1,8 @@
 import cv2
-import numpy as np
 import math
 import matplotlib.pyplot as plt
+import numpy as np
+
 
 def get_horizon_y(img, draw=False, min_y=200, max_y=300, hough_threshold=150):
   ''' Estimate horizon y coordinate using Canny edge detector and Hough transform. '''
