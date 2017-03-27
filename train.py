@@ -49,17 +49,17 @@ batch_size = 100
 
 for i in range(int(datagen.num_images * 3)):
   xs_train, ys_train = datagen.LoadTrainBatch(batch_size)
-  train_step.run(feed_dict={model.x: xs_train, model.y_: ys_train, model.keep_prob: 0.8})
+  train_step.run(feed_dict={model.x:xs_train, model.y_:ys_train, model.keep_prob:0.5})
 
   if i % 10 == 0:
     xs_val, ys_val = datagen.LoadValBatch(batch_size)
     # Write logs at every iteration
-    train_loss = train_summary.eval(feed_dict={model.x:xs_train, model.y_: ys_train, model.keep_prob: 1.0})
-    val_loss = val_summary.eval(feed_dict={model.x:xs_val, model.y_: ys_val, model.keep_prob: 1.0})
+    train_loss = train_summary.eval(feed_dict={model.x:xs_train, model.y_:ys_train, model.keep_prob:1.0})
+    val_loss = val_summary.eval(feed_dict={model.x:xs_val, model.y_:ys_val, model.keep_prob:1.0})
     train_summary_writer.add_summary(train_loss, i)
     val_summary_writer.add_summary(val_loss, i)
-    train_loss = loss.eval(feed_dict={model.x:xs_train, model.y_: ys_train, model.keep_prob: 1.0})
-    val_loss = loss.eval(feed_dict={model.x:xs_val, model.y_: ys_val, model.keep_prob: 1.0})
+    train_loss = loss.eval(feed_dict={model.x:xs_train, model.y_:ys_train, model.keep_prob:1.0})
+    val_loss = loss.eval(feed_dict={model.x:xs_val, model.y_:ys_val, model.keep_prob:1.0})
     print("step: %d, loss: %g, val loss: %g" % (i, train_loss, val_loss))
 
   if i % 100 == 0:
